@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Powell Ndlovu | GIS, Remote Sensing, GeoAI &amp; Data Science Consultant</title>
+  <meta name="description" content="Powell Ndlovu turns satellite imagery, spatial data and business data into maps, dashboards and machine-learning tools that support better decisions. GIS, remote sensing, climate analytics, GeoAI and AI automation.">
+  <link rel="icon" href="powell.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* MSc thesis highlight (About section) */
+    .thesis-card {
+      position: relative; overflow: hidden; margin: 8px 0 28px; padding: 26px 26px 22px;
+      border-radius: 20px; color: #fff; background: var(--grad-slate); box-shadow: var(--shadow-1);
+      isolation: isolate;
+    }
+    .thesis-card::before {
+      content: ""; position: absolute; inset: 0; z-index: -1; opacity: .5;
+      background:
+        radial-gradient(circle at 92% 8%, rgba(255, 107, 74, .55), transparent 40%),
+        radial-gradient(circle at 70% 30%, rgba(220, 20, 60, .35), transparent 45%),
+        repeating-radial-gradient(circle at 92% 8%, transparent 0 22px, rgba(255, 255, 255, .06) 22px 23px);
+    }
+    .thesis-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .thesis-label { font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: #ff9aa9; }
+    .thesis-badge { padding: 4px 10px; border-radius: 999px; background: var(--grad-hot); font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    .thesis-card h4 { margin-top: 12px; font-size: 1.12rem; line-height: 1.4; font-weight: 700; }
+    .col-right .thesis-card p { margin: 10px 0 0; color: rgba(255, 255, 255, .8); font-size: .94rem; }
+    .thesis-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
+    .thesis-facts div { padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .12); }
+    .thesis-facts strong { display: block; font-size: 1.25rem; line-height: 1.1; color: #fff; }
+    .thesis-facts span { font-size: .76rem; color: rgba(255, 255, 255, .65); }
+    .thesis-tags { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+    .thesis-tags li { padding: 4px 10px; border-radius: 999px; font-size: .74rem; font-weight: 600; border: 1px solid rgba(255, 255, 255, .2); }
+    /* Thesis maps */
+    .thesis-maps { margin-top: 90px; }
+    .thesis-maps-head { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; align-items: end; margin-bottom: 30px; }
+    .thesis-maps-head h3 { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 700; line-height: 1.15; }
+    .thesis-maps-head > p { color: var(--muted); font-size: .98rem; border-left: 3px solid var(--crimson); padding-left: 18px; }
+    .thesis-maps-head > p strong { color: var(--ink); }
+    .thesis-maps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+    .map-card { margin: 0; border-radius: 22px; overflow: hidden; background: #fff; box-shadow: var(--shadow-1); border: 1px solid var(--hairline); transition: transform .35s ease, box-shadow .35s ease; }
+    .map-card:hover { transform: translateY(-6px); box-shadow: 0 30px 60px rgba(18, 22, 28, .16); }
+    .map-zoom { position: relative; display: block; width: 100%; padding: 0; border: 0; background: #fff; cursor: zoom-in; }
+    .map-zoom img { width: 100%; height: auto; aspect-ratio: 2576 / 1822; object-fit: cover; transition: transform .6s ease; }
+    .map-card:hover .map-zoom img { transform: scale(1.03); }
+    .map-zoom-hint {
+      position: absolute; right: 14px; bottom: 14px; padding: 6px 12px; border-radius: 999px;
+      background: rgba(18, 22, 28, .82); color: #fff; font-size: .78rem; font-weight: 700; letter-spacing: .04em;
+      opacity: 0; transform: translateY(6px); transition: opacity .25s ease, transform .25s ease;
+    }
+    .map-card:hover .map-zoom-hint, .map-zoom:focus-visible .map-zoom-hint { opacity: 1; transform: none; }
+    @media (hover: none) { .map-zoom-hint { opacity: 1; transform: none; } }
+    .map-card figcaption { padding: 18px 22px 22px; border-top: 1px solid var(--hairline); }
+    .map-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .map-city { font-weight: 700; font-size: 1.08rem; }
+    .map-temp { padding: 5px 12px; border-radius: 999px; background: var(--grad-hot); color: #fff; font-family: var(--mono); font-size: .82rem; font-weight: 500; }
+    .map-card figcaption p { margin-top: 8px; color: var(--muted); font-size: .93rem; }
+    .thesis-maps-cta {
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 14px; margin-top: 30px;
+      padding: 22px; border-radius: 18px; background: #fff; border: 2px dashed rgba(220, 20, 60, .35); text-align: center;
+    }
+    .thesis-maps-cta p { font-weight: 600; margin-right: 6px; }
+    .thesis-maps-cta .cta-small { color: var(--ink); }
+    .thesis-maps-cta .cta-small:hover { color: #fff; }
+    .thesis-maps-cta .cta-dark { border-color: var(--ink); }
+    .thesis-maps-cta .cta-dark::before { background: var(--ink); }
+    .map-lightbox {
+      position: fixed; inset: 0; z-index: 1500; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 14px; padding: 24px; background: rgba(10, 12, 16, .92); backdrop-filter: blur(6px); animation: lb-in .25s ease;
+    }
+    .map-lightbox[hidden] { display: none; }
+    .map-lightbox img { max-width: min(1400px, 100%); max-height: 82vh; border-radius: 12px; box-shadow: 0 30px 80px rgba(0, 0, 0, .5); background: #fff; }
+    .map-lightbox-caption { color: #fff; font-size: .95rem; text-align: center; max-width: 900px; }
+    .map-lightbox-close {
+      position: absolute; top: 18px; right: 20px; width: 46px; height: 46px; border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, .35); background: transparent; color: #fff; font-size: 1.8rem; line-height: 1; cursor: pointer;
+    }
+    .map-lightbox-close:hover { background: var(--crimson); border-color: var(--crimson); }
+    @keyframes lb-in { from { opacity: 0; } }
+    @media (max-width: 860px) {
+      .thesis-maps-head, .thesis-maps-grid { grid-template-columns: 1fr; }
+      .thesis-maps { margin-top: 70px; }
+    }
+    @media (max-width: 480px) { .thesis-facts { grid-template-columns: 1fr 1fr; } .thesis-facts div:last-child { grid-column: span 2; } }
+  </style>
+</head>
+
+<body>
+  <!-- ============================== HEADER ============================== -->
+  <header id="header">
+    <div class="header-inner">
+      <a href="#hero" class="brand" aria-label="Powell Ndlovu, back to top">
+        <span class="brand-logo">
+          <span class="brand-initials" aria-hidden="true">PN</span>
+          <img src="powell.jpg" alt="" width="44" height="44" onerror="this.remove()">
+        </span>
+        <span class="brand-name"><span>P</span>owell <span>N</span>dlovu</span>
+      </a>
+
+      <nav class="nav-list" aria-label="Main">
+        <ul id="menu">
+          <li><a href="#hero" data-after="Home">Home</a></li>
+          <li><a href="#services" data-after="Services">Services</a></li>
+          <li><a href="#projects" data-after="Projects">Projects</a></li>
+          <li><a href="#about" data-after="About">About</a></li>
+          <li><a href="#contact" data-after="Contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" class="nav-ai" data-pa-open>
+          <span class="nav-ai-dot"></span>Ask AI
+        </button>
+        <button type="button" class="hamburger" aria-label="Open menu" aria-controls="menu" aria-expanded="false">
+          <span class="bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================== HERO ============================== -->
+    <section id="hero">
+      <svg class="hero-contours" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <g fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M-50 620 C 200 540, 380 700, 640 610 S 1050 520, 1260 600"/>
+          <path d="M-50 660 C 220 590, 400 740, 660 650 S 1070 560, 1260 640"/>
+          <path d="M-50 700 C 240 640, 420 780, 680 690 S 1090 600, 1260 680"/>
+          <ellipse cx="960" cy="230" rx="170" ry="110"/>
+          <ellipse cx="960" cy="230" rx="120" ry="76"/>
+          <ellipse cx="960" cy="230" rx="72" ry="44"/>
+          <ellipse cx="960" cy="230" rx="30" ry="18"/>
+        </g>
+      </svg>
+      <div class="hero container">
+        <div class="hero-copy">
+          <p class="hero-kicker"><span class="pulse"></span>GIS · Remote Sensing · GeoAI · Data Science</p>
+          <h1>Hello, <span></span></h1>
+          <h1>My Name is <span></span></h1>
+          <h1>Powell Ndlovu <span></span></h1>
+          <p class="hero-lead">I turn satellite imagery, spatial data and business data into <strong>maps, dashboards and machine-learning tools</strong> that help organisations see what's happening, why it's changing, and what to do next.</p>
+          <div class="hero-ctas">
+            <a href="#projects" class="cta">See my work</a>
+            <button type="button" class="cta cta-ai" data-pa-open>✦ Ask my AI assistant</button>
+          </div>
+          <ul class="hero-creds">
+            <li>Chevening Alumnus</li>
+            <li>MSc GIS &amp; Climate Change, Swansea University (2025/26)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="hero-strip">
+        <div class="strip-item"><strong>7</strong><span>specialist service lines</span></div>
+        <div class="strip-item"><strong>18</strong><span>live dashboards in my GeoAI portfolio</span></div>
+        <div class="strip-item"><strong>GEE · QGIS · ArcGIS</strong><span>plus Python &amp; R</span></div>
+        <div class="strip-item"><strong>SMEs → NGOs</strong><span>small businesses to large organisations</span></div>
+      </div>
+    </section>
+
+    <!-- ============================== SERVICES ============================== -->
+    <section id="services">
+      <div class="services container">
+        <div class="section-head">
+          <p class="eyebrow">What I do</p>
+          <h2 class="section-title">Serv<span>i</span>ces</h2>
+          <p class="section-lead">From a single map to a full AI-enabled system, every engagement is built around the decision you need to make, the data you already have, and outputs your team can actually use.</p>
+        </div>
+
+        <div class="service-grid">
+          <article class="service-item">
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>
+            </div>
+            <h3>GIS &amp; Spatial Analysis</h3>
+            <p>Suitability, proximity, accessibility and multi-criteria analysis, clean spatial databases, and publication-ready maps in ArcGIS and QGIS.</p>
+          </article>
+          <article class="service-item">
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M13 7 9 3 5 7l4 4M17 11l4 4-4 4-4-4"/><path d="m8 12 4 4M16 8l-4 4"/><path d="M9 21a6 6 0 0 0-6-6"/></svg>
+            </div>
+            <h3>Remote Sensing &amp; Earth Observation</h3>
+            <p>Satellite image processing, land-cover classification, vegetation and water indices, and change detection over time with Google Earth Engine.</p>
+          </article>
+          <article class="service-item">
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+            </div>
+            <h3>Climate &amp; Environmental Intelligence</h3>
+            <p>Temperature and rainfall trends, hazard and exposure mapping, climate-risk assessment and environmental impact assessment support.</p>
+          </article>
+          <article class="service-item">
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-7"/></svg>
+            </div>
+            <h3>Data Analysis &amp; Dashboards</h3>
+            <p>Data cleaning, statistics, KPI design and interactive dashboards in Power BI, ArcGIS Dashboards and Streamlit.</p>
+          </article>
+          <article class="service-item">
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+            </div>
+            <h3>GeoAI &amp; Machine Learning</h3>
+            <p>Predictive and classification models, spatial feature engineering, forecasting, and explainable results you can defend.</p>
+          </article>
+          <article class="service-item">
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg>
+            </div>
+            <h3>AI Chatbots, Automation &amp; Web</h3>
+            <p>Document-grounded chatbots like the one on this site, workflow automation, prompt engineering, and modern websites that connect it all.</p>
+          </article>
+          <article class="service-item">
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>
+            </div>
+            <h3>Training &amp; Mentoring</h3>
+            <p>Practical courses and workshops in QGIS, ArcGIS, Earth Engine, Python, R, dashboards, GeoAI and responsible AI.</p>
+          </article>
+          <article class="service-item service-ask">
+            <h3>Not sure which service fits?</h3>
+            <p>Describe your challenge to my AI assistant and it will point you to the right service, with sources.</p>
+            <button type="button" class="cta cta-small" data-pa-open>✦ Ask the assistant</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== PROJECTS ============================== -->
+    <section id="projects">
+      <div class="projects container">
+        <div class="section-head">
+          <p class="eyebrow">Case studies</p>
+          <h2 class="section-title">Recent <span>Projects</span></h2>
+          <p class="section-lead">Each project solves a real decision problem. Here's the challenge, what I built, and what it can do for you.</p>
+        </div>
+
+        <div class="all-projects">
+          <!-- 01 -->
+          <article class="project-card">
+            <div class="project-media">
+              <img src="./land-cover-classification.jpg" alt="Land-cover classification map produced from satellite imagery" loading="lazy">
+              <span class="project-num">01</span>
+            </div>
+            <div class="project-body">
+              <p class="project-kicker">Remote sensing · Machine learning · Google Earth Engine</p>
+              <h3>Land Cover Classification</h3>
+              <p class="project-hook">Know exactly what's on the ground, without months of field surveys.</p>
+              <dl class="project-story">
+                <div><dt>The challenge</dt><dd>Planners and environmental teams need accurate, up-to-date maps of built-up areas, vegetation, water and bare land, but ground surveys are slow, costly and quickly out of date.</dd></div>
+                <div><dt>What I built</dt><dd>A supervised machine-learning workflow in Google Earth Engine: image preprocessing, carefully designed training samples, model training and accuracy checks, then GIS-ready land-cover layers.</dd></div>
+                <div><dt>Your advantage</dt><dd>A map you can trust for zoning, tracking urban growth, protecting habitats and reporting, repeatable for any year or region.</dd></div>
+              </dl>
+              <ul class="project-tags"><li>Supervised classification</li><li>Satellite imagery</li><li>GEE</li><li>QGIS</li></ul>
+              <div class="project-actions">
+                <a href="#contact" class="cta cta-small">Map my area</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 02 -->
+          <article class="project-card">
+            <div class="project-media">
+              <img src="./ml-prediction-system.jpg" alt="Machine learning prediction system interface" loading="lazy">
+              <span class="project-num">02</span>
+            </div>
+            <div class="project-body">
+              <p class="project-kicker">Predictive analytics · Python · R</p>
+              <h3>Machine Learning Prediction System</h3>
+              <p class="project-hook">Stop guessing. Decide with forecasts grounded in your own data.</p>
+              <dl class="project-story">
+                <div><dt>The challenge</dt><dd>Businesses, policymakers and researchers sit on years of historical data but still plan by instinct, so risks are spotted late and resources end up in the wrong place.</dd></div>
+                <div><dt>What I built</dt><dd>A prediction system that learns from historical business, environmental, geographic and climate variables, built so its results are validated before use and explained in plain language.</dd></div>
+                <div><dt>Your advantage</dt><dd>Earlier warnings, sharper targeting and evidence-based plans, from managing risk to allocating budgets and resources.</dd></div>
+              </dl>
+              <ul class="project-tags"><li>Classification &amp; regression</li><li>Feature engineering</li><li>Model validation</li><li>Python &amp; R</li></ul>
+              <div class="project-actions">
+                <a href="#contact" class="cta cta-small">Predict with my data</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 03 -->
+          <article class="project-card">
+            <div class="project-media">
+              <img src="./time-series-forecasting.jpg" alt="Time-series forecast chart" loading="lazy">
+              <span class="project-num">03</span>
+            </div>
+            <div class="project-body">
+              <p class="project-kicker">Time-series forecasting · XGBoost</p>
+              <h3>Time-Series Forecasting</h3>
+              <p class="project-hook">See demand, sales or climate trends coming before they arrive.</p>
+              <dl class="project-story">
+                <div><dt>The challenge</dt><dd>Seasonal swings and shifting trends make it hard to plan stock, staffing, budgets or resources. Simple averages miss the patterns that matter.</dd></div>
+                <div><dt>What I built</dt><dd>A forecasting model using the XGBoost gradient-boosting algorithm, trained on historical time-series data to capture trend and seasonality and improve accuracy over simple methods.</dd></div>
+                <div><dt>Your advantage</dt><dd>Forward-looking numbers for finance, sales, agriculture or weather-sensitive operations, so you plan ahead instead of reacting.</dd></div>
+              </dl>
+              <ul class="project-tags"><li>XGBoost</li><li>Seasonality</li><li>Trend analysis</li><li>Python</li></ul>
+              <div class="project-actions">
+                <a href="#contact" class="cta cta-small">Forecast my trends</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 04 -->
+          <article class="project-card">
+            <div class="project-media">
+              <img src="./vegetation-health-ndvi.jpg" alt="NDVI and EVI vegetation health map" loading="lazy">
+              <span class="project-num">04</span>
+            </div>
+            <div class="project-body">
+              <p class="project-kicker">Vegetation monitoring · NDVI / EVI · GEE &amp; QGIS</p>
+              <h3>Vegetation Health from Space</h3>
+              <p class="project-hook">Spot crop stress and land degradation before they show on the ground.</p>
+              <dl class="project-story">
+                <div><dt>The challenge</dt><dd>Drought stress, disease and nutrient problems spread across large farms and landscapes long before anyone can walk every field.</dd></div>
+                <div><dt>What I built</dt><dd>NDVI and EVI mapping from satellite imagery in Google Earth Engine and QGIS, tracking vegetation vigour across space and time and flagging areas that are falling behind.</dd></div>
+                <div><dt>Your advantage</dt><dd>Timely, large-area monitoring for agriculture, conservation, climate studies and land-use planning, so inputs and interventions go where they're needed.</dd></div>
+              </dl>
+              <ul class="project-tags"><li>NDVI</li><li>EVI</li><li>Time series</li><li>Precision agriculture</li></ul>
+              <div class="project-actions">
+                <a href="#contact" class="cta cta-small">Monitor my land</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 05 -->
+          <article class="project-card">
+            <div class="project-media">
+              <img src="./data-visualisation-dashboards.jpg" alt="Interactive data visualisation dashboard" loading="lazy">
+              <span class="project-num">05</span>
+            </div>
+            <div class="project-body">
+              <p class="project-kicker">Data visualisation · Dashboards · Storytelling</p>
+              <h3>Data Visualisation &amp; Dashboards</h3>
+              <p class="project-hook">Turn overwhelming spreadsheets into a one-screen story your leaders act on.</p>
+              <dl class="project-story">
+                <div><dt>The challenge</dt><dd>Important insights get buried in rows of numbers and long reports, so decisions are delayed and the evidence is never fully used.</dd></div>
+                <div><dt>What I built</dt><dd>Interactive dashboards and clear static graphics that show trends, patterns and relationships at a glance, designed for both technical teams and executives.</dd></div>
+                <div><dt>Your advantage</dt><dd>Faster meetings, clearer reporting and a shared view of performance, whether for business intelligence, research or monitoring and evaluation.</dd></div>
+              </dl>
+              <ul class="project-tags"><li>Power BI</li><li>Streamlit</li><li>Plotly</li><li>KPI design</li></ul>
+              <div class="project-actions">
+                <a href="#contact" class="cta cta-small">Build my dashboard</a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Live dashboards -->
+        <div class="live-head">
+          <div>
+            <p class="eyebrow">Try them yourself</p>
+            <h3>Live dashboards you can open right now</h3>
+          </div>
+          <a class="live-all" href="https://kabila96.github.io/GeoAI-Portfolio/#portfolio" target="_blank" rel="noopener">See all 18 in my GeoAI portfolio →</a>
+        </div>
+        <div class="dash-grid">
+          <article class="dash-card">
+            <div class="dash-media"><img src="https://kabila96.github.io/GeoAI-Portfolio/SpatioTemporal%20Dynamics%20of%20UHI%20in%20Greater%20London%20(2018%E2%80%932025).jfif" alt="" loading="lazy" onerror="this.remove()"><span class="dash-badge">Urban heat</span></div>
+            <h3>Urban Heat Islands in Greater London, 2018–2025</h3>
+            <p>Where London overheats and how that is changing, to guide cooling, greening and resilience planning.</p>
+            <a class="dash-link" href="https://london-uhi-2018-2025.streamlit.app/" target="_blank" rel="noopener">Open live dashboard ↗</a>
+          </article>
+          <article class="dash-card">
+            <div class="dash-media"><img src="https://kabila96.github.io/GeoAI-Portfolio/Spatial%20Inequalities,%20Socioeconomic%20Deprivation,%20and%20Drug-Related%20Crime%20Patterns%20Across%20Wales.png" alt="" loading="lazy" onerror="this.remove()"><span class="dash-badge">Spatial crime intelligence</span></div>
+            <h3>Deprivation &amp; Drug-Related Crime Across Wales</h3>
+            <p>MSOA-level GIS and spatial statistics exposing where deprivation and crime risk overlap.</p>
+            <a class="dash-link" href="https://gf9a5ypbjcd7atqrqkz3gr.streamlit.app/" target="_blank" rel="noopener">Open live dashboard ↗</a>
+          </article>
+          <article class="dash-card">
+            <div class="dash-media"><img src="https://kabila96.github.io/GeoAI-Portfolio/Kazuma.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="dash-badge">Earth Engine app</span></div>
+            <h3>Kazuma Forest Ecosystem Monitor</h3>
+            <p>NDVI, NDMI and NBR time series that track forest health, stress and disturbance as early warning signals.</p>
+            <a class="dash-link" href="https://ee-powellndlovu.projects.earthengine.app/view/kazuma-forest-multi-index-monitoring-app" target="_blank" rel="noopener">Open live app ↗</a>
+          </article>
+          <article class="dash-card">
+            <div class="dash-media"><img src="https://kabila96.github.io/GeoAI-Portfolio/Elite-Crop-Yield-Prediction-App.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="dash-badge">Predictive agriculture</span></div>
+            <h3>Crop Yield Prediction App</h3>
+            <p>Machine-learning yield estimates that support more data-driven planting and planning decisions.</p>
+            <a class="dash-link" href="https://elite-crop-yield-prediction-app-grwqhtbzuhofvtd6wetbiw.streamlit.app/" target="_blank" rel="noopener">Open live app ↗</a>
+          </article>
+          <article class="dash-card">
+            <div class="dash-media"><img src="https://kabila96.github.io/GeoAI-Portfolio/Telecommunication.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="dash-badge">Customer retention</span></div>
+            <h3>Telecom Churn &amp; Retention Intelligence</h3>
+            <p>Flags customers at risk of leaving, explains why with SHAP, and ranks retention actions by return on investment.</p>
+            <a class="dash-link" href="https://telecom-churn-screening-intelligence-dashboard-abhp2krxxtosdff.streamlit.app/" target="_blank" rel="noopener">Open live dashboard ↗</a>
+          </article>
+          <article class="dash-card">
+            <div class="dash-media"><img src="https://kabila96.github.io/GeoAI-Portfolio/healthcare.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="dash-badge">Explainable health AI</span></div>
+            <h3>Heart Disease Risk Screening</h3>
+            <p>XGBoost with threshold tuning and SHAP explanations for transparent early-risk screening from health indicators.</p>
+            <a class="dash-link" href="https://imjd8nnawzauusdaweeyfs.streamlit.app/" target="_blank" rel="noopener">Open live app ↗</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== PROCESS ============================== -->
+    <section id="process">
+      <div class="process container">
+        <div class="section-head">
+          <p class="eyebrow">How we'll work</p>
+          <h2 class="section-title">From question to <span>answer</span></h2>
+        </div>
+        <ol class="process-steps">
+          <li><span>01</span><h3>Discover</h3><p>Clarify the decision, users, data, constraints and what success looks like.</p></li>
+          <li><span>02</span><h3>Assess</h3><p>Review data quality, formats, access, privacy and existing tools.</p></li>
+          <li><span>03</span><h3>Design</h3><p>Agree methods, platforms, milestones and validation steps.</p></li>
+          <li><span>04</span><h3>Build</h3><p>Develop the maps, models, dashboards, automations or training.</p></li>
+          <li><span>05</span><h3>Assure</h3><p>Check accuracy, reproducibility, usability and limitations.</p></li>
+          <li><span>06</span><h3>Hand over</h3><p>Deliver with documentation, training and recommended next steps.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================== ABOUT ============================== -->
+    <section id="about">
+      <div class="about container">
+        <div class="col-left">
+          <div class="about-img">
+            <img src="./kabila.jpg" alt="Powell Ndlovu" loading="lazy">
+          </div>
+        </div>
+        <div class="col-right">
+          <p class="eyebrow">About me</p>
+          <h2 class="section-title">About <span>me</span></h2>
+          <h3 class="about-role">Environmentalist · GIS &amp; Data Analyst · GeoAI Practitioner</h3>
+          <p>I work where environmental science, geospatial analysis and data science meet. My job is to take complex information, such as satellite imagery, climate records, field data and business data, and turn it into clear evidence and practical tools that people can use.</p>
+          <p>I'm a <strong>Chevening Alumnus</strong>, and I studied GIS and Climate Change at <strong>Swansea University</strong> in 2025/26. My background is in forestry and environmental management, and I keep building my skills in machine learning, AI agents and prompt engineering through continuing professional development.</p>
+
+          <div class="thesis-card">
+            <div class="thesis-top">
+              <span class="thesis-label">MSc thesis · Swansea University · 2025/26</span>
+              <span class="thesis-badge">Chevening</span>
+            </div>
+            <h4>Comparing Summer Urban Surface Heat, Population Exposure and Environmental Drivers across Greater London and Birmingham–West Midlands (MSOAs), 2021–2025</h4>
+            <p>Where do cities get hottest in summer, who lives in those hotspots, and which environmental factors are driving the heat? This study compared two of England's largest urban regions, neighbourhood by neighbourhood, across five summers.</p>
+            <div class="thesis-facts">
+              <div><strong>2</strong><span>city regions</span></div>
+              <div><strong>5</strong><span>summers, 2021–2025</span></div>
+              <div><strong>MSOA</strong><span>neighbourhood scale</span></div>
+            </div>
+            <ul class="thesis-tags">
+              <li>Urban surface heat</li><li>Population exposure</li><li>Environmental drivers</li><li>Climate resilience</li>
+            </ul>
+          </div>
+          <ul class="about-points">
+            <li>Clear communication for technical and non-technical audiences</li>
+            <li>Reproducible Python and R workflows</li>
+            <li>Responsible AI with human review built in</li>
+          </ul>
+          <div class="about-ctas">
+            <a href="https://kabila96.github.io/online-cv-resume/" class="cta" target="_blank" rel="noopener">View my resume</a>
+            <a href="https://kabila96.github.io/GeoAI-Portfolio/" class="cta cta-ghost" target="_blank" rel="noopener">GeoAI portfolio</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thesis findings: extreme-heat maps -->
+      <div class="thesis-maps container">
+        <div class="thesis-maps-head">
+          <div>
+            <p class="eyebrow">From the thesis</p>
+            <h3>Where extreme summer heat concentrates</h3>
+          </div>
+          <p>Each city is measured against <strong>its own hottest 10%</strong> of neighbourhoods (the P90 threshold), so the red areas show each city's local extreme-heat hotspots, based on mean summer land surface temperature (LST).</p>
+        </div>
+
+        <div class="thesis-maps-grid">
+          <figure class="map-card">
+            <button type="button" class="map-zoom" data-full="thesis-london-p90-heat.jpg" data-caption="City-specific P90 extreme-heat MSOAs in Greater London (mean LST ≥ 38.55 °C)" aria-label="Enlarge the Greater London map">
+              <img src="thesis-london-p90-heat.jpg" alt="Map of Greater London MSOAs, with extreme-heat neighbourhoods (mean land surface temperature at or above 38.55 °C) shown in red" loading="lazy">
+              <span class="map-zoom-hint">⤢ Enlarge</span>
+            </button>
+            <figcaption>
+              <div class="map-meta"><span class="map-city">Greater London</span><span class="map-temp">≥ 38.55 °C</span></div>
+              <p>Hotspots cluster in north-east and east London, with smaller pockets in the south and west.</p>
+            </figcaption>
+          </figure>
+
+          <figure class="map-card">
+            <button type="button" class="map-zoom" data-full="thesis-birmingham-p90-heat.jpg" data-caption="City-specific P90 extreme-heat MSOAs in the Birmingham–West Midlands metropolitan area (mean LST ≥ 37.15 °C)" aria-label="Enlarge the Birmingham–West Midlands map">
+              <img src="thesis-birmingham-p90-heat.jpg" alt="Map of Birmingham–West Midlands MSOAs, with extreme-heat neighbourhoods (mean land surface temperature at or above 37.15 °C) shown in red" loading="lazy">
+              <span class="map-zoom-hint">⤢ Enlarge</span>
+            </button>
+            <figcaption>
+              <div class="map-meta"><span class="map-city">Birmingham–West Midlands</span><span class="map-temp">≥ 37.15 °C</span></div>
+              <p>Hotspots concentrate in central Birmingham, the north-west of the conurbation and around Coventry in the east.</p>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="thesis-maps-cta">
+          <p>Need neighbourhood-level heat-risk evidence for your city, council or organisation?</p>
+          <button type="button" class="cta cta-small" data-pa-open>✦ Ask about heat-risk mapping</button>
+          <a href="#contact" class="cta cta-small cta-dark">Discuss a project</a>
+        </div>
+      </div>
+
+      <!-- Lightbox -->
+      <div class="map-lightbox" id="mapLightbox" role="dialog" aria-modal="true" aria-label="Enlarged map" hidden>
+        <button type="button" class="map-lightbox-close" aria-label="Close">×</button>
+        <img src="" alt="">
+        <p class="map-lightbox-caption"></p>
+      </div>
+    </section>
+
+    <!-- ============================== CONTACT ============================== -->
+    <section id="contact">
+      <div class="contact container">
+        <div class="section-head">
+          <p class="eyebrow">Let's talk</p>
+          <h2 class="section-title">Contact <span>info</span></h2>
+          <p class="section-lead">Tell me about your project. Fees and timelines are agreed after a short scoping conversation about your goals and data.</p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-items">
+            <div class="contact-item">
+              <div class="contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></div>
+              <div class="contact-info">
+                <h3>Phone</h3>
+                <a href="tel:+447352140847">+44 7352 140847</a>
+                <a href="tel:+263776006388">+263 776 006 388</a>
+                <a href="tel:+263771480011">+263 771 480 011</a>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div>
+              <div class="contact-info">
+                <h3>Email</h3>
+                <a href="mailto:powellndlovu@gmail.com">powellndlovu@gmail.com</a>
+                <a href="mailto:powellndlovu@yahoo.com">powellndlovu@yahoo.com</a>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+              <div class="contact-info">
+                <h3>Address</h3>
+                <p>3765, Nketa 7, Bulawayo, Zimbabwe</p>
+              </div>
+            </div>
+          </div>
+
+          <form class="contact-form" action="https://formspree.io/f/xojpgone" method="POST">
+            <h3>Send a quick message</h3>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            <label for="message">Project details</label>
+            <textarea id="message" name="message" rows="5" placeholder="What decision are you trying to make, and what data do you have?" required></textarea>
+            <input type="hidden" name="_subject" value="New enquiry from Powell's main portfolio">
+            <button type="submit" class="cta">Send message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer id="footer">
+    <div class="footer container">
+      <div class="brand-name footer-brand"><span>Po</span>well <span>A</span>ndile Ndlovu</div>
+      <p class="footer-tag">Geospatial intelligence, data science &amp; responsible AI</p>
+      <div class="social-icon">
+        <a href="https://linkedin.com/in/powellndlovu96" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/></svg></a>
+        <a href="https://github.com/kabila96" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3.1-.4 6.4-1.5 6.4-7a5.4 5.4 0 0 0-1.5-3.7 5 5 0 0 0-.1-3.8s-1.2-.3-3.9 1.5a13.4 13.4 0 0 0-7 0C6.3 1.7 5.1 2 5.1 2a5 5 0 0 0-.1 3.8A5.4 5.4 0 0 0 3.5 9.5c0 5.4 3.3 6.6 6.4 7a3.4 3.4 0 0 0-.9 2.6V22"/></svg></a>
+        <a href="mailto:powellndlovu@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></a>
+      </div>
+      <p class="copyright">© <span id="year">2026</span> Powell Andile Ndlovu. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="./app.js"></script>
+  <script>
+    // Thesis map lightbox
+    (() => {
+      const box = document.getElementById('mapLightbox');
+      if (!box) return;
+      const img = box.querySelector('img');
+      const cap = box.querySelector('.map-lightbox-caption');
+      const closeBtn = box.querySelector('.map-lightbox-close');
+      let opener = null;
+      const close = () => { box.hidden = true; document.body.style.overflow = ''; opener?.focus(); };
+      document.querySelectorAll('.map-zoom').forEach((btn) => btn.addEventListener('click', () => {
+        opener = btn;
+        img.src = btn.dataset.full;
+        img.alt = btn.querySelector('img').alt;
+        cap.textContent = btn.dataset.caption;
+        box.hidden = false;
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+      }));
+      closeBtn.addEventListener('click', close);
+      box.addEventListener('click', (e) => { if (e.target === box) close(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !box.hidden) close(); });
+    })();
+  </script>
+</body>
+
+</html>
