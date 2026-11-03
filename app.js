@@ -185,6 +185,7 @@
   /* ------------------------------------------------------------ welcome screen */
   const MISSIONS = [
     ["Explore projects", [
+      "What did Powell's MSc thesis find about urban heat?",
       "How does Powell map land cover from satellite imagery?",
       "Which live dashboards can I try?",
       "Can you monitor crop or vegetation health for my farm?",
